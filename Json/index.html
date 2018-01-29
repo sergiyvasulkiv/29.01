@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+
+            <table class="table table-bordered table-responsive">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User Name</th>
+                    <th>birthDay</th>
+                    <th>company</th>
+                    <th>contact</th>
+                    <th>email</th>
+                    <th>address</th>
+                    <th>country</th>
+                    <th>Photo</th>
+                </tr>
+                </thead>
+
+                <tbody id="output">
+
+               </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+   var xhr= new XMLHttpRequest();
+   xhr.open("get","/data.json");
+   xhr.send();
+ xhr.responseType = "json";
+     tableBody= document.getElementById("output");
+
+
+
+
+   function goTextContentInTd (content) {
+
+       var field=document.createElement("td");
+       field.textContent = content;
+       return field;
+   }
+
+   function goPhotoInTd (content) {
+
+       var field=document.createElement("td"),
+           photoImg = document.createElement("img");
+       photoImg.setAttribute("src",content);
+       field.appendChild(photoImg);
+       return field;
+   }
+
+
+   xhr.addEventListener("readystatechange", function (e) {
+       if (this.readyState !== this.DONE){
+           return;
+       }
+
+       for (i=0; i< this.response.length;i++){
+           var
+               tr = document.createElement("tr");
+           userData=this.response[i];
+
+
+for(var field in userData){
+
+    if (field== "photo"){
+
+        tr.appendChild(  goPhotoInTd(userData[field]));
+    }
+else {
+    tr.appendChild( goTextContentInTd(userData[field]));}
+}
+           tableBody.appendChild(tr);
+                  }
+
+   });
+
+
+
+
+</script>
+</body>
+</html>
